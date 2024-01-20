@@ -21,7 +21,7 @@ def text_to_speech():
     for chunk in chunks:
         data = {
           "text": chunk,
-          "speaker": "00151554-3826-11ee-a861-00163e2ac61b",
+          "speaker": "0015548d-3826-11ee-a861-00163e2ac61b",
           "emotion": "Neutral"
         }
 
