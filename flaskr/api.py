@@ -71,7 +71,7 @@ def process_text():
 def retrieve_audio():
     # write up def
     """
-    :param: video_name: String , index: int, video marker
+    :param: v_id: video id
     :return:
     """
     v_id = request.args.get('v_id', default='none', type=str)
