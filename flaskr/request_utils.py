@@ -1,6 +1,7 @@
 from flask import request
 
 # ARGS
+ID = 'id'
 SENTENCES = 'sentences'
 VOICE = 'voice'
 

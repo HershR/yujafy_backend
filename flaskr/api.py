@@ -1,6 +1,6 @@
 import flask
-from flask import Blueprint, request, jsonify
-from .request_utils import SENTENCES, VOICE, check_json_post_args, check_get_args
+from flask import Blueprint, request, jsonify, current_app
+from .request_utils import ID, SENTENCES, VOICE, check_json_post_args, check_get_args
 import textwrap
 import requests
 import json
@@ -9,8 +9,7 @@ bp = Blueprint('api', __name__)
 
 API_KEY = "1b547580cfd44b27b1647aec0fafcddc"
 
-
-# FILE_PATH = flask.Config['FILE_PATH']
+FILE_PATH = './audiofiles'
 
 
 @bp.route('/api/process', methods=['POST'])
@@ -24,13 +23,15 @@ def process_text():
     if error:
         return jsonify(error), 400
     url = "https://api.topmediai.com/v1/text2speech"
+    v_id = request.json.get(ID)
     sentences = request.json.get(SENTENCES)
+
     headers = {
         "accept": "application/json",
         "x-api-key": API_KEY,
         "Content-Type": "application/json"
     }
-    audio_links = []
+    audio_links = {}
     for sentence in sentences:
         chunks = textwrap.wrap(sentence, width=250)
 
@@ -54,37 +55,35 @@ def process_text():
             else:
                 print(r)
                 links.append(None)
-        audio_links.append(links)
+        audio_links[len(audio_links)] = links
+    file_name = f'{FILE_PATH}\{v_id}.json'
+
+    import os
+    current_directory = os.getcwd()
+    print(f"The current working directory is: {current_directory}")
+
+    with open(file_name, 'w') as json_file:
+        json.dump(audio_links, json_file, indent=4)
     return jsonify({'data': audio_links}), 200
 
 
-'''
-@bp.route('/api/retrieve', method=['GET'])
+@bp.route('/api/retrieve', methods=['GET'])
 def retrieve_audio():
     # write up def
     """
     :param: video_name: String , index: int, video marker
     :return:
     """
-    data, error = check_json_post_args([SENTENCES, VOICE])
-    if error:
-        return jsonify(error), 400
+    v_id = request.args.get('v_id', default='none', type=str)
+    print(v_id)
     # else work with data
-    file_name = data['video_name']
-    sound_index = data['index']
-    file_path = f"{FILE_PATH}/{file_name}.txt"
-    sound_url = None
-    error = "sound file does not exist"
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-        if 0 <= sound_index < len(lines):
-            desired_line = lines[sound_index]
-            sound_url = desired_line
-        else:
-            print(f"Line {sound_index} is out of range for the file.")
-            error = "index out of bounds"
-    if not sound_url:
-        return jsonify(error), 400
-    return jsonify({'url': sound_url}, 200)
-'''
+    file_path = f"{FILE_PATH}/{v_id}.json"
+    try:
+        with open(file_path, 'r') as json_file:
+            audio_links = json.load(json_file)
+    except BaseException as e:
+        print('error', e)
+        return jsonify("error: Unable to find file audio files corresponding to ID"), 404
+    return jsonify({'data': audio_links}), 200
+
 # /v1/voices_list
