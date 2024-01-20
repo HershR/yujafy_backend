@@ -30,4 +30,5 @@ def text_to_speech():
     return data['data']['oss_url']
 
 # Call the function
-text_to_speech()
+
+print(text_to_speech())
