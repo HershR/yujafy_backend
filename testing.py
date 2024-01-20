@@ -2,13 +2,20 @@ from pprint import pprint
 
 import requests as requests
 
+s = "With these changes, " \
+    "your extension will display a " \
+    "popup with a button, and when the" \
+    " button is pressed, it will make " \
+    "the specified request using the fetch " \
+    "API. Adjust the code according to your " \
+    "specific requirements and extension design."
 
 def process():
     url = 'http://localhost:5000/api/process'
     param = \
         {
             'id': 'test',
-            'sentences': ['one', 'two', 'three'],
+            'sentences': [s],
             'voice': 'default'
         }
 
@@ -31,4 +38,4 @@ def retrieve():
 
 
 if __name__ == "__main__":
-    retrieve()
+    process()

@@ -1,5 +1,6 @@
 import flask
 from flask import Blueprint, request, jsonify, current_app
+from flask_cors import CORS, cross_origin
 from .request_utils import ID, SENTENCES, VOICE, check_json_post_args, check_get_args
 import textwrap
 import requests
@@ -13,6 +14,7 @@ FILE_PATH = './audiofiles'
 
 
 @bp.route('/api/process', methods=['POST'])
+@cross_origin()
 def process_text():
     # write up def
     """
@@ -25,7 +27,7 @@ def process_text():
     url = "https://api.topmediai.com/v1/text2speech"
     v_id = request.json.get(ID)
     sentences = request.json.get(SENTENCES)
-
+    print(sentences)
     headers = {
         "accept": "application/json",
         "x-api-key": API_KEY,
@@ -50,7 +52,7 @@ def process_text():
             if r.status_code == 200:
 
                 data = r.json()
-                print(data['data']['oss_url'])
+                print(chunk, data['data']['oss_url'])
                 links.append(data['data']['oss_url'])
             else:
                 print(r)
@@ -58,9 +60,9 @@ def process_text():
         audio_links[len(audio_links)] = links
     file_name = f'{FILE_PATH}\{v_id}.json'
 
-    import os
-    current_directory = os.getcwd()
-    print(f"The current working directory is: {current_directory}")
+    #import os
+    #current_directory = os.getcwd()
+    #print(f"The current working directory is: {current_directory}")
 
     with open(file_name, 'w') as json_file:
         json.dump(audio_links, json_file, indent=4)
@@ -68,6 +70,7 @@ def process_text():
 
 
 @bp.route('/api/retrieve', methods=['GET'])
+@cross_origin()
 def retrieve_audio():
     # write up def
     """
