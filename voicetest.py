@@ -6,7 +6,7 @@ def text_to_speech():
     url = "https://api.topmediai.com/v1/text2speech"
     headers = {
         "accept": "application/json",
-        "x-api-key": "1b547580cfd44b27b1647aec0fafcddc",
+        "x-api-key": "06085097256849a3a7b5f837c4583363",
         "Content-Type": "application/json"
     }
 
