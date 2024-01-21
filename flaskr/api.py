@@ -6,7 +6,7 @@ import json
 
 bp = Blueprint('api', __name__)
 
-API_KEY = "5f03e641d32e42a2b3b599feb548f563"
+API_KEY = "746828da9ae74d539f5a811b5313fc19"
 
 FILE_PATH = "./audiofiles"
 
@@ -36,7 +36,8 @@ def process_text():
     }
     audio_links = []
     for sentence in sentences:
-        chunks = split_string(sentence, 200)
+        max_char_size = 200
+        chunks = split_string(sentence, max_char_size)
 
         # links = []
 
@@ -63,7 +64,7 @@ def process_text():
                 print(r)
                 # links.append(None)
         # audio_links[len(audio_links)] = links
-    file_name = f'{FILE_PATH}\{v_id}.json'
+    file_name = f'{FILE_PATH}\{v_id}_{voice_id}.json'
 
     # import os
     # current_directory = os.getcwd()
@@ -71,7 +72,6 @@ def process_text():
 
     with open(file_name, 'w') as json_file:
         json.dump(audio_links, json_file, indent=4)
-
     return jsonify({'data': audio_links}), 200
 
 
@@ -128,7 +128,7 @@ def process_json():
                 print(r)
                 # links.append(None)
         audio_links[index] = links
-    file_name = f'{FILE_PATH}\{v_id}.json'
+    file_name = f'{FILE_PATH}\{v_id}_{voice_id}.json'
 
     with open(file_name, 'w') as json_file:
         json.dump(audio_links, json_file, indent=4)
@@ -141,19 +141,21 @@ def process_json():
 def retrieve_audio():
     # write up def
     """
-    :param: v_id: video id
+    :param: v_id: video id, voice_id
     :return:
     """
-    v_id = request.args.get('v_id', default='none', type=str)
+    v_id = request.args.get(ID, default='none', type=str)
+    voice_id = request.args.get(VOICE, default='none', type=str)
     print(v_id)
     # else work with data
-    file_path = f"{FILE_PATH}/{v_id}.json"
+    file_path = f"{FILE_PATH}/{v_id}_{voice_id}.json"
     try:
         with open(file_path, 'r') as json_file:
             audio_links = json.load(json_file)
     except BaseException as e:
         print('error', e)
         return jsonify("error: Unable to find file audio files corresponding to ID"), 404
+    print({'data': audio_links})
     return jsonify({'data': audio_links}), 200
 
 
