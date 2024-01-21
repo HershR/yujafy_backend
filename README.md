@@ -3,7 +3,7 @@ Backend of for tts Yuja videos
 Currently made to be run locally
 
 # Set Up
-1. install packages in requirments.txt
+1. install packages in requirments.txt with "pip install -r requirements.txt"
 2. get API key from [topmediai.com](https://www.topmediai.com/api/text-to-speech-api/)
 3. in ./flaskr/api.py replace API key var
 4. run server with 
