@@ -1,10 +1,10 @@
 from flask import request
 
 # ARGS
-ID = 'id'
+ID = 'video_id'
 SENTENCES = 'sentences'
 VOICE = 'voice'
-
+ENTRIES = 'entries'
 
 
 def check_get_args(args_list):
