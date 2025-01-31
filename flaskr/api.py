@@ -6,7 +6,7 @@ import json
 
 bp = Blueprint('api', __name__)
 
-API_KEY = "746828da9ae74d539f5a811b5313fc19"
+API_KEY = "8d98dac6214a4732bdbce3b44447810a"
 
 FILE_PATH = "./audiofiles"
 
@@ -64,7 +64,7 @@ def process_text():
                 print(r)
                 # links.append(None)
         # audio_links[len(audio_links)] = links
-    file_name = f'{FILE_PATH}\{v_id}_{voice_id}.json'
+    file_name = f'{FILE_PATH}{v_id}_{voice_id}.json'
 
     # import os
     # current_directory = os.getcwd()
